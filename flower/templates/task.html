@@ -42,6 +42,7 @@
                   {% else %}
                   <span class="label label-default">{{ task.state }}</span>
                   {% end %}
+                  <a class = "btn btn-warning" role = "button" onclick = "Requeue()"> Requeue </a>
                 </td>
               </tr>
               <tr>
@@ -59,6 +60,48 @@
               </tbody>
             </table>
           </div>
+
+          <script type = "text/javascript">
+
+            function unescapeHtml(safe) {
+              return String(safe).replace(/&amp;/g, '&')
+                  .replace(/&lt;/g, '<')
+                  .replace(/&gt;/g, '>')
+                  .replace(/&quot;/g, '"')
+                  .replace(/&#39;/g, '\'')
+                  .replace(/&#039;/g, '\'');
+
+            }
+
+            function getArgs(){
+              // var args = "[{{ task.args[1:-1] if task.args[-2] != ',' else task.args[1:-2]}}]";
+              var args = "{{task.args}}";
+              args = unescapeHtml(args);
+              return args;
+            }
+
+            function Requeue(){
+              var args = getArgs();
+
+              // alert(args);
+
+              $.ajax({
+                 type: "POST",
+                 url: "http://localhost:5555/api/task/send-task/{{ getattr(task, 'name', None) }}",
+                 dataType: "json",
+                 success: function () {
+                     alert("Requeue successful")
+                     window.location = "http://localhost:5555/tasks"
+                 },
+                 error: function(request){
+                   alert("Request failed: " + "localhost:5555/api/task/send-task/{{ getattr(task, 'name', None) }}")
+                 },
+                 data: '{"args": ' + args + '}'
+             });
+
+
+            }
+          </script>
 
           <div class="span6">
             <table class="table table-bordered table-striped">

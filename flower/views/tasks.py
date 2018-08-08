@@ -14,6 +14,8 @@ from tornado import web
 from ..views import BaseHandler
 from ..utils.tasks import iter_tasks, get_task_by_id, as_dict
 
+import json
+
 logger = logging.getLogger(__name__)
 
 
@@ -24,6 +26,10 @@ class TaskView(BaseHandler):
 
         if task is None:
             raise web.HTTPError(404, "Unknown task '%s'" % task_id)
+
+        task.args = json.dumps(eval(task.args))
+        # print(task.args)
+
 
         self.render("task.html", task=task)
 
