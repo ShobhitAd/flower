@@ -79,7 +79,7 @@
               var protocol = window.location.protocol;
             	var host = window.location.hostname;
               var port = window.location.port;
-              return protocol + "//" + host + ":" + port;
+              return protocol + "//" + host + ((port != "")?":":"") + port;
             }
 
             function Requeue(){
