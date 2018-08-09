@@ -76,9 +76,10 @@
             }
 
             function getHostURL(){
-              var url = window.location.href, path = window.location.pathname;
-              var host = url.substring(0, url.indexOf(path));
-              return host;
+              var protocol = window.location.protocol;
+            	var host = window.location.hostname;
+              var port = window.location.port;
+              return protocol + "//" + host + ":" + port;
             }
 
             function Requeue(){
@@ -99,7 +100,7 @@
                  error: function(request){
                    alert("Request failed: " + api_url)
                  },
-                 
+
                  data: '{"args": ' + args + '}'
              });
 
